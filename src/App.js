@@ -1,7 +1,7 @@
 import './App.css';
 import { memo, useState, createContext, useContext } from 'react';
 import { QueryClient, QueryClientProvider, useQuery } from 'react-query';
-
+import { Memo } from './Memo';
 const queryCilent = new QueryClient();
 
 const DogsContext = createContext();
@@ -18,19 +18,30 @@ function DogsProvider({ children }) {
   );
 }
 
-const DogsContent = () => {
+// const DogsContent = () => {
+//   return (
+//     <div className="App">
+//       <DogsPicker />
+//       <DogsPicture />
+//     </div>
+//   );
+// };
+
+// use memo
+const DogsContent = memo(() => {
   return (
     <div className="App">
       <DogsPicker />
       <DogsPicture />
     </div>
   );
-};
+});
 
 function App() {
   return (
     <DogsProvider>
       <DogsContent></DogsContent>
+      <Memo /> {/* ทดลองการใช้ memo โดยเรียก component Memo */}
     </DogsProvider>
   );
 }
@@ -47,8 +58,6 @@ const DogsPicker = () => {
     </select>
   );
 };
-
-// https://dog.ceo/api/breed/Affenpinscher/images
 
 async function fetchPicture({ queryKey }) {
   const response = await fetch(`https://dog.ceo/api/breed/${queryKey}/images`);
@@ -69,7 +78,7 @@ const DogsPicture = () => {
       {/* <pre>{JSON.stringify(data, null, 2)}</pre> */}
       <div className="row">
         {data.message.map((val, index) => (
-          <img key={index} src={val} />
+          <img key={index} src={val} alt="" />
         ))}
       </div>
     </div>
